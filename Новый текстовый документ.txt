@@ -1,0 +1,13 @@
+#!/bin/bash
+pathto=~/
+pack=apache2-2.4.29-2.x86_64.rpm
+#pack=rpm*.deb
+while read HOSTADDR
+do
+	rsync $pathto/$pack $HOSTADDR:/home/mosl1k/tmp
+	echo "copy-ok"
+	#ssh -tt $HOSTADDR ping mail.ru -w 1	
+	#ssh -tt $HOSTADDR sudo -i passwd 123456
+	ssh -tt $HOSTADDR alien -i -c /home/mosl1k/tmp/$pack
+	echo "ssh-ok"
+done < <(grep -o '^[0-9]\+\(\.[0-9]\{1,3\}\)\{3\}' /etc/hosts | grep -v '^127')
